@@ -20,6 +20,7 @@ async function run() {
         await client.connect()
         const itemCollection = client.db('inventoryAssignment').collection('item')
 
+        // Load data 
         app.get('/item', async (req, res) => {
             const query = {}
             const cursor = itemCollection.find(query)
@@ -32,6 +33,24 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const item = await itemCollection.findOne(query)
             res.send(item)
+        })
+
+        // // Add quantity
+        // app.post('/item/:id', async (req, res) => {
+        //     // const id = req.params.id 
+        //     const keys = req.body
+        //     const query = { _id: { $in: keys } }
+        //     const cursor = itemCollection.find(query)
+        //     const items = await cursor.toArray()
+        //     console.log(keys)
+        //     // const result = await itemCollection.insertOne(newItem)
+        //     res.send(items)
+        // })
+
+        app.post('/item', async (req, res) => {
+            const newItem = req.body
+            const result = await itemCollection.insertOne(newItem)
+            res.send(result)
         })
 
     }
