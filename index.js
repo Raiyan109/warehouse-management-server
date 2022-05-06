@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config()
+const ObjectId = require('mongodb').ObjectId
 const port = process.env.PORT || 5000
 
 const app = express()
@@ -35,21 +36,28 @@ async function run() {
             res.send(item)
         })
 
-        // // Add quantity
-        // app.post('/item/:id', async (req, res) => {
-        //     // const id = req.params.id 
-        //     const keys = req.body
-        //     const query = { _id: { $in: keys } }
-        //     const cursor = itemCollection.find(query)
-        //     const items = await cursor.toArray()
-        //     console.log(keys)
-        //     // const result = await itemCollection.insertOne(newItem)
-        //     res.send(items)
-        // })
+        // Add quantity
+        app.post('/item/:id', async (req, res) => {
+            // const id = req.params.id 
+            const keys = req.body
+            const query = { _id: { $in: keys } }
+            const cursor = itemCollection.find(query)
+            const items = await cursor.toArray()
+            console.log(keys)
+            // const result = await itemCollection.insertOne(newItem)
+            res.send(items)
+        })
 
         app.post('/item', async (req, res) => {
             const newItem = req.body
             const result = await itemCollection.insertOne(newItem)
+            res.send(result)
+        })
+        // DELETE ITEM
+        app.delete('/item/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await itemCollection.deleteOne(query)
             res.send(result)
         })
 
