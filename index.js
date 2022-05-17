@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config()
 const ObjectId = require('mongodb').ObjectId
@@ -59,6 +60,15 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const result = await itemCollection.deleteOne(query)
             res.send(result)
+        })
+
+        app.post('/login', async (req, res) => {
+            const user = req.body
+            console.log(user);
+            const accessToken = jwt.sign(user, process.env.ACCESS_SECRET_TOKEN, {
+                expiresIn: '1d'
+            })
+            res.send({ accessToken })
         })
 
     }
