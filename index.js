@@ -81,7 +81,7 @@ run().catch(console.dir)
 
 
 app.get('/', (req, res) => {
-    res.send('running assignment server')
+    res.send('running assignment servers')
 })
 
 app.listen(port, () => {
